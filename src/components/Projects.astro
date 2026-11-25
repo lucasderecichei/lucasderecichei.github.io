@@ -1,0 +1,79 @@
+---
+import { portfolioData, type ThemeTone } from '../data/portfolio';
+import SectionHeader from './SectionHeader.astro';
+
+const topAccent: Record<ThemeTone, string> = {
+  teal: 'border-t-teal-400/70',
+  burgundy: 'border-t-rose-400/70',
+  slate: 'border-t-slate-400/70',
+};
+---
+
+<section id="projects" class="scroll-mt-20">
+  <SectionHeader title="Projects" />
+
+  <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+    {
+      portfolioData.projects.map((project) => (
+        <article
+          class={`flex flex-col justify-between rounded-xl border border-slate-800/90 border-t-2 ${topAccent[project.tone]} bg-[#111a2c] p-5 transition-all hover:border-slate-700 hover:bg-[#141f35]`}
+        >
+          <div>
+            <div class="mb-2 flex items-center justify-between gap-2">
+              <span class="font-mono text-[11px] text-slate-400">{project.category}</span>
+              <span class="font-mono text-[11px] text-slate-500">{project.year}</span>
+            </div>
+
+            <h3 class="mb-2 text-base font-semibold text-slate-50">{project.name}</h3>
+
+            <p class="mb-4 text-xs leading-relaxed text-slate-300/90 sm:text-[13px]">
+              {project.description}
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex flex-wrap gap-1.5">
+              {project.stack.map((tech) => (
+                <span class="rounded border border-slate-800 bg-[#0b111e] px-2 py-0.5 font-mono text-[10px] text-slate-400">
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            <div class="flex items-center gap-2 border-t border-slate-800/70 pt-3">
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 rounded-md border border-slate-700/80 bg-slate-900/70 px-2.5 py-1 font-mono text-[11px] text-slate-300 transition-colors hover:border-teal-500/50 hover:text-teal-300"
+                >
+                  <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16 18 22 12 16 6" />
+                    <polyline points="8 6 2 12 8 18" />
+                  </svg>
+                  GitHub
+                </a>
+              )}
+              {project.demoUrl && (
+                <a
+                  href={project.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 rounded-md border border-slate-700/80 bg-slate-900/70 px-2.5 py-1 font-mono text-[11px] text-slate-300 transition-colors hover:border-teal-500/50 hover:text-teal-300"
+                >
+                  <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                  Demo
+                </a>
+              )}
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>

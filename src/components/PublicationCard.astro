@@ -1,0 +1,153 @@
+---
+import type { Publication, PublicationTag } from '../data/portfolio';
+import { withBase } from '../utils/paths';
+
+interface Props {
+  publication: Publication;
+  ownerName: string;
+}
+
+const { publication, ownerName } = Astro.props;
+
+const tagDotColors: Record<PublicationTag, { dot: string; text: string }> = {
+  systems: { dot: 'bg-teal-400', text: 'text-teal-300/90' },
+  reliability: { dot: 'bg-rose-400', text: 'text-rose-300/90' },
+  tooling: { dot: 'bg-slate-400', text: 'text-slate-300/90' },
+};
+
+const tagMeta = tagDotColors[publication.tag];
+---
+
+<article
+  class="pub-card group flex flex-col justify-between rounded-xl border border-slate-800/90 bg-[#111a2c] p-3.5 transition-all hover:border-slate-700 hover:bg-[#141f35]"
+  data-year={publication.year}
+  data-tag={publication.tag}
+>
+  <div>
+    <!-- 16:9 Figure Container -->
+    <div class="mb-3.5 aspect-video w-full overflow-hidden rounded-lg border border-slate-800/80 bg-slate-100">
+      <img
+        src={withBase(publication.figure)}
+        alt={`Diagram for ${publication.title}`}
+        loading="lazy"
+        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+      />
+    </div>
+
+    <!-- Venue & Tag row -->
+    <div class="mb-1.5 flex items-center justify-between gap-2 text-[11px]">
+      <span class="font-mono font-medium text-slate-400">{publication.venue}</span>
+      <span class={`inline-flex items-center gap-1.5 font-mono ${tagMeta.text}`}>
+        <span class={`h-1.5 w-1.5 rounded-full ${tagMeta.dot}`}></span>
+        {publication.tag}
+      </span>
+    </div>
+
+    <!-- Title -->
+    <h3 class="mb-1.5 text-[15px] font-semibold leading-snug text-slate-50">
+      {publication.title}
+    </h3>
+
+    <!-- Authors (owner highlighted in teal) -->
+    <p class="mb-2.5 text-xs leading-relaxed text-slate-400">
+      {
+        publication.authors.map((author, index) => (
+          <>
+            {index > 0 && ', '}
+            {author === ownerName ? (
+              <span class="font-medium text-teal-400">{author}</span>
+            ) : (
+              <span>{author}</span>
+            )}
+          </>
+        ))
+      }
+    </p>
+
+    <!-- 2-3 line summary -->
+    <p class="mb-3 line-clamp-3 text-xs leading-relaxed text-slate-400/95">
+      {publication.summary}
+    </p>
+  </div>
+
+  <!-- Bottom metadata: optional award + action links -->
+  <div class="space-y-2.5 pt-1">
+    {
+      publication.award && (
+        <div class="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-amber-300">
+          <svg class="h-3 w-3 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01L12 2z" />
+          </svg>
+          {publication.award}
+        </div>
+      )
+    }
+
+    <div class="flex flex-wrap items-center gap-2 border-t border-slate-800/70 pt-2.5">
+      {
+        publication.links.paper && (
+          <a
+            href={publication.links.paper}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 rounded-md border border-slate-700/80 bg-slate-900/70 px-2.5 py-1 font-mono text-[11px] text-slate-300 transition-colors hover:border-teal-500/50 hover:text-teal-300"
+          >
+            <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6" />
+            </svg>
+            paper
+          </a>
+        )
+      }
+
+      {
+        publication.links.code && (
+          <a
+            href={publication.links.code}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 rounded-md border border-slate-700/80 bg-slate-900/70 px-2.5 py-1 font-mono text-[11px] text-slate-300 transition-colors hover:border-teal-500/50 hover:text-teal-300"
+          >
+            <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+            code
+          </a>
+        )
+      }
+
+      {
+        publication.links.website && (
+          <a
+            href={publication.links.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 rounded-md border border-slate-700/80 bg-slate-900/70 px-2.5 py-1 font-mono text-[11px] text-slate-300 transition-colors hover:border-teal-500/50 hover:text-teal-300"
+          >
+            <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            site
+          </a>
+        )
+      }
+
+      <button
+        type="button"
+        data-bibtex={publication.bibtex}
+        class="bibtex-copy-btn ml-auto inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-slate-700/80 bg-slate-900/70 px-2.5 py-1 font-mono text-[11px] text-slate-300 transition-colors hover:border-teal-500/50 hover:text-teal-300"
+        title="Copy BibTeX citation"
+      >
+        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+        <span class="bibtex-label">BibTeX</span>
+      </button>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import Updates from '../components/Updates.astro';
+import Research from '../components/Research.astro';
+import Experience from '../components/Experience.astro';
+import Projects from '../components/Projects.astro';
+import Footer from '../components/Footer.astro';
+import { portfolioData } from '../data/portfolio';
+---
+
+<BaseLayout
+  title={portfolioData.meta.siteTitle}
+  description={portfolioData.meta.siteDescription}
+>
+  <Navbar />
+
+  <main class="mx-auto max-w-5xl space-y-20 px-5 pb-20">
+    <Hero />
+    <Updates />
+    <Research />
+    <Experience />
+    <Projects />
+  </main>
+
+  <Footer />
+</BaseLayout>

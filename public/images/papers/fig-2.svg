@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" fill="none">
+  <rect width="640" height="360" fill="#f8fafc"/>
+  <rect x="24" y="24" width="592" height="312" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="48" y="60" fill="#0f172a" font-family="ui-sans-serif, system-ui, sans-serif" font-size="16" font-weight="700">BoundsCheck Conformal Abstention</text>
+  <!-- Calibration plot -->
+  <line x1="68" y1="276" x2="320" y2="276" stroke="#94a3b8" stroke-width="2"/>
+  <line x1="68" y1="96" x2="68" y2="276" stroke="#94a3b8" stroke-width="2"/>
+  <path d="M74 260C120 245 156 196 204 166C244 141 278 130 314 124" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M74 268C124 256 164 218 206 190C246 164 282 152 314 146" stroke="#14b8a6" stroke-width="2.5" stroke-dasharray="6 4"/>
+  <rect x="190" y="96" width="126" height="180" fill="#ffe4e6" fill-opacity="0.5"/>
+  <line x1="190" y1="96" x2="190" y2="276" stroke="#e11d48" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="253" y="114" text-anchor="middle" fill="#be123c" font-family="ui-monospace, monospace" font-size="11" font-weight="600">ABSTAIN ZONE</text>
+  <!-- Decision summary boxes -->
+  <rect x="356" y="102" width="232" height="72" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="374" y="128" fill="#0f172a" font-family="ui-monospace, monospace" font-size="12" font-weight="600">1. Non-conformity Score</text>
+  <text x="374" y="150" fill="#475569" font-family="ui-sans-serif, sans-serif" font-size="12">Streaming quantile estimation</text>
+  <rect x="356" y="192" width="232" height="72" rx="8" fill="#0f172a"/>
+  <text x="374" y="218" fill="#2dd4bf" font-family="ui-monospace, monospace" font-size="12" font-weight="600">2. Provable Coverage Gate</text>
+  <text x="374" y="240" fill="#cbd5e1" font-family="ui-sans-serif, sans-serif" font-size="12">Guaranteed alpha-level risk bound</text>
+  <text x="48" y="314" fill="#64748b" font-family="ui-monospace, monospace" font-size="11">Distribution-free shift detection under online covariate drift</text>
+</svg>

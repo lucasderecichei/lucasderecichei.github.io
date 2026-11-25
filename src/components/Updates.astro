@@ -1,0 +1,60 @@
+---
+import { portfolioData, type BadgeKind } from '../data/portfolio';
+import RichText from './RichText.astro';
+import SectionHeader from './SectionHeader.astro';
+
+const badgeStyles: Record<BadgeKind, string> = {
+  PAPER: 'border-teal-500/30 bg-teal-950/50 text-teal-300',
+  PROJECT: 'border-slate-600/60 bg-slate-800/70 text-slate-200',
+  TALK: 'border-rose-500/30 bg-rose-950/45 text-rose-300',
+};
+---
+
+<section id="updates" class="scroll-mt-20">
+  <SectionHeader title="Updates" />
+
+  <div class="custom-scrollbar max-h-80 overflow-y-auto pr-2">
+    <ul class="divide-y divide-slate-800/70">
+      {
+        portfolioData.updates.map((item) => (
+          <li class="flex flex-col gap-2 py-3.5 first:pt-1 last:pb-1 sm:flex-row sm:items-start sm:gap-6">
+            <span class="w-24 shrink-0 pt-0.5 font-mono text-xs font-medium text-slate-400">
+              {item.date}
+            </span>
+
+            <div class="flex-1 space-y-2">
+              <p class="text-sm leading-relaxed text-slate-300">
+                <RichText segments={item.segments} />
+              </p>
+
+              <span
+                class={`inline-flex items-center gap-1.5 rounded border px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider ${badgeStyles[item.badge]}`}
+              >
+                {item.badge === 'PAPER' && (
+                  <svg class="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <path d="M14 2v6h6" />
+                  </svg>
+                )}
+                {item.badge === 'PROJECT' && (
+                  <svg class="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <polyline points="16 18 22 12 16 6" />
+                    <polyline points="8 6 2 12 8 18" />
+                  </svg>
+                )}
+                {item.badge === 'TALK' && (
+                  <svg class="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                    <line x1="12" x2="12" y1="19" y2="22" />
+                  </svg>
+                )}
+                {item.badge}
+              </span>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

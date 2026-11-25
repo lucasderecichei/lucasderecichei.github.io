@@ -1,0 +1,17 @@
+{
+  "name": "academic-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "^5.7.10",
+    "tailwindcss": "^4.1.4",
+    "@tailwindcss/vite": "^4.1.4"
+  }
+}

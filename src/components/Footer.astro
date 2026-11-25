@@ -1,0 +1,17 @@
+---
+import { portfolioData } from '../data/portfolio';
+---
+
+<footer class="border-t border-slate-800/70 py-8">
+  <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-3 px-5 text-xs text-slate-500 sm:flex-row">
+    <p>
+      © {new Date().getFullYear()} {portfolioData.hero.name}. Built with Astro &amp; Tailwind CSS.
+    </p>
+    <a
+      href="#about"
+      class="font-mono text-slate-400 transition-colors hover:text-teal-300"
+    >
+      ↑ Back to top
+    </a>
+  </div>
+</footer>

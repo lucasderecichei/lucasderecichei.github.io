@@ -1,0 +1,44 @@
+---
+import { portfolioData } from '../data/portfolio';
+import SectionHeader from './SectionHeader.astro';
+---
+
+<section id="experience" class="scroll-mt-20">
+  <SectionHeader title="Experience" />
+
+  <div class="space-y-4">
+    {
+      portfolioData.experience.map((item) => (
+        <article class="rounded-xl border border-slate-800/90 bg-[#111a2c] p-5 transition-colors hover:border-slate-700">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <div class="flex flex-wrap items-center gap-2.5">
+                <h3 class="text-base font-semibold text-slate-50">{item.role}</h3>
+                <span class="rounded border border-slate-700/80 bg-slate-800/70 px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-slate-300">
+                  {item.badge}
+                </span>
+              </div>
+              <p class="mt-0.5 text-sm font-medium text-teal-400">
+                {item.organization}
+                <span class="font-normal text-slate-500"> · {item.location}</span>
+              </p>
+            </div>
+
+            <span class="shrink-0 font-mono text-xs text-slate-400">{item.period}</span>
+          </div>
+
+          <p class="mt-3 text-sm leading-relaxed text-slate-300">{item.summary}</p>
+
+          <ul class="mt-3 space-y-1.5 border-t border-slate-800/70 pt-3">
+            {item.highlights.map((bullet) => (
+              <li class="flex items-start gap-2.5 text-xs leading-relaxed text-slate-400 sm:text-[13px]">
+                <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-400/70"></span>
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+</section>
