@@ -1,13 +1,12 @@
 # Academic & Technical Portfolio (Astro + Tailwind CSS)
 
-A dark-mode academic/technical portfolio template built with **Astro 5** and **Tailwind CSS v4**, configured for static deployment on **GitHub Pages**.
+A dark-mode academic/technical portfolio template built with **Astro 5** and **Tailwind CSS v4**, configured for static deployment on **GitHub Pages** (`https://lucasderecichei.github.io`).
 
 ## Project Structure
 
-- `src/data/portfolio.ts` — Centralized content (profile, bio, socials, updates, research themes, publications + BibTeX, experience, projects).
+- `src/data/portfolio.ts` — Centralized content (currently empty placeholder; fill in profile, bio, socials, updates, research themes, publications, experience, and projects when ready).
 - `src/components/` — Modular UI sections (`Navbar`, `Hero`, `Updates`, `Research`, `PublicationCard`, `Experience`, `Projects`, `Footer`).
-- `public/images/` — Portrait and 16:9 publication figure assets (replace `portrait.svg` and `papers/fig-*.svg` with your own images).
-- `public/cv.pdf` — Placeholder CV file (replace with your real PDF).
+- `public/` — Place static assets here (e.g. `images/portrait.jpg`, `images/papers/...`, `cv.pdf`).
 - `.github/workflows/deploy.yml` — Automated GitHub Actions workflow for GitHub Pages.
 
 ## Local Development
@@ -28,6 +27,5 @@ npm run preview
 
 ## Deploying to GitHub Pages
 
-1. Update `site` (and `base`, if deploying to `https://<username>.github.io/<repo>/`) in `astro.config.mjs`.
-2. Push to `main`.
-3. In your GitHub repository settings under **Settings → Pages**, set **Source** to **GitHub Actions**.
+1. Push to `main`.
+2. In your GitHub repository settings under **Settings → Pages**, set **Source** to **GitHub Actions**.

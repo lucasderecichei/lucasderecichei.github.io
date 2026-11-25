@@ -1,5 +1,5 @@
 ---
-import type { Publication, PublicationTag } from '../data/portfolio';
+import type { Publication } from '../data/portfolio';
 import { withBase } from '../utils/paths';
 
 interface Props {
@@ -9,13 +9,16 @@ interface Props {
 
 const { publication, ownerName } = Astro.props;
 
-const tagDotColors: Record<PublicationTag, { dot: string; text: string }> = {
+const tagDotColors: Record<string, { dot: string; text: string }> = {
   systems: { dot: 'bg-teal-400', text: 'text-teal-300/90' },
   reliability: { dot: 'bg-rose-400', text: 'text-rose-300/90' },
   tooling: { dot: 'bg-slate-400', text: 'text-slate-300/90' },
 };
 
-const tagMeta = tagDotColors[publication.tag];
+const tagMeta = tagDotColors[publication.tag] ?? {
+  dot: 'bg-slate-400',
+  text: 'text-slate-300/90',
+};
 ---
 
 <article
@@ -25,13 +28,17 @@ const tagMeta = tagDotColors[publication.tag];
 >
   <div>
     <!-- 16:9 Figure Container -->
-    <div class="mb-3.5 aspect-video w-full overflow-hidden rounded-lg border border-slate-800/80 bg-slate-100">
-      <img
-        src={withBase(publication.figure)}
-        alt={`Diagram for ${publication.title}`}
-        loading="lazy"
-        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-      />
+    <div class="mb-3.5 aspect-video w-full overflow-hidden rounded-lg border border-slate-800/80 bg-slate-900">
+      {
+        publication.figure && (
+          <img
+            src={withBase(publication.figure)}
+            alt={`Diagram for ${publication.title}`}
+            loading="lazy"
+            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+          />
+        )
+      }
     </div>
 
     <!-- Venue & Tag row -->
@@ -54,7 +61,7 @@ const tagMeta = tagDotColors[publication.tag];
         publication.authors.map((author, index) => (
           <>
             {index > 0 && ', '}
-            {author === ownerName ? (
+            {ownerName && author === ownerName ? (
               <span class="font-medium text-teal-400">{author}</span>
             ) : (
               <span>{author}</span>
@@ -136,18 +143,22 @@ const tagMeta = tagDotColors[publication.tag];
         )
       }
 
-      <button
-        type="button"
-        data-bibtex={publication.bibtex}
-        class="bibtex-copy-btn ml-auto inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-slate-700/80 bg-slate-900/70 px-2.5 py-1 font-mono text-[11px] text-slate-300 transition-colors hover:border-teal-500/50 hover:text-teal-300"
-        title="Copy BibTeX citation"
-      >
-        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-        </svg>
-        <span class="bibtex-label">BibTeX</span>
-      </button>
+      {
+        publication.bibtex && (
+          <button
+            type="button"
+            data-bibtex={publication.bibtex}
+            class="bibtex-copy-btn ml-auto inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-slate-700/80 bg-slate-900/70 px-2.5 py-1 font-mono text-[11px] text-slate-300 transition-colors hover:border-teal-500/50 hover:text-teal-300"
+            title="Copy BibTeX citation"
+          >
+            <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            <span class="bibtex-label">BibTeX</span>
+          </button>
+        )
+      }
     </div>
   </div>
 </article>

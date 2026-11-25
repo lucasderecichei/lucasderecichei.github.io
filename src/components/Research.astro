@@ -7,9 +7,10 @@ import SectionHeader from './SectionHeader.astro';
 const { research, hero } = portfolioData;
 
 const years = research.publications.map((p) => p.year);
-const minYear = Math.min(...years);
-const maxYear = Math.max(...years);
-const tags = Object.keys(research.tagLabels) as Array<keyof typeof research.tagLabels>;
+const fallbackYear = new Date().getFullYear();
+const minYear = years.length > 0 ? Math.min(...years) : fallbackYear;
+const maxYear = years.length > 0 ? Math.max(...years) : fallbackYear;
+const tags = Object.keys(research.tagLabels);
 
 const themeCardStyles: Record<ThemeTone, { card: string; num: string }> = {
   teal: {
@@ -25,128 +26,161 @@ const themeCardStyles: Record<ThemeTone, { card: string; num: string }> = {
     num: 'text-slate-400',
   },
 };
+
+const emptyThemeSlots: Array<{ number: string; tone: ThemeTone }> = [
+  { number: '01', tone: 'teal' },
+  { number: '02', tone: 'burgundy' },
+  { number: '03', tone: 'slate' },
+];
 ---
 
 <section id="research" class="scroll-mt-20">
   <SectionHeader title="Research" />
 
-  <p class="mb-6 text-sm leading-relaxed text-slate-300 sm:text-[15px]">
-    {research.intro}
-  </p>
+  {
+    research.intro && (
+      <p class="mb-6 text-sm leading-relaxed text-slate-300 sm:text-[15px]">
+        {research.intro}
+      </p>
+    )
+  }
 
   <!-- 3 numbered theme cards (01 Teal, 02 Burgundy, 03 Gray/Slate) -->
-  <div class="mb-5 grid grid-cols-1 gap-4 md:grid-cols-3">
-    {
-      research.themes.map((theme) => (
-        <div class={`rounded-xl border p-5 ${themeCardStyles[theme.tone].card}`}>
-          <span class={`mb-2 block font-mono text-xs font-semibold ${themeCardStyles[theme.tone].num}`}>
-            {theme.number}
-          </span>
-          <h3 class="mb-2 text-[15px] font-bold text-slate-50">{theme.title}</h3>
-          <p class="text-xs leading-relaxed text-slate-300/90 sm:text-[13px]">
-            <RichText segments={theme.segments} />
-          </p>
-        </div>
-      ))
-    }
-  </div>
-
-  <p class="mb-7 text-xs text-slate-400 sm:text-sm">
-    For a complete publication index, visit my{' '}
-    <a
-      href={research.scholarUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="text-slate-200 underline decoration-slate-500/70 underline-offset-4 transition-colors hover:text-teal-300 hover:decoration-teal-400"
-    >
-      Google Scholar
-    </a>{' '}
-    page.
-  </p>
-
-  <!-- Interactive Filter Bar: Dual year slider + tag dropdown -->
-  <div class="mb-6 flex flex-col justify-between gap-4 rounded-xl border border-slate-800/90 bg-[#111a2c] px-4 py-3 sm:flex-row sm:items-center">
-    <div class="flex flex-1 flex-wrap items-center gap-3">
-      <span class="font-mono text-xs text-slate-400">Filter by year:</span>
-      <span id="year-min-display" class="w-9 font-mono text-xs font-semibold text-teal-300">
-        {minYear}
-      </span>
-
-      <div class="range-slider-wrapper min-w-[140px] flex-1 max-w-xs">
-        <div class="range-track-bg"></div>
-        <div id="range-track-fill" class="range-track-fill" style="left: 0%; width: 100%;"></div>
-        <input
-          id="year-min-input"
-          type="range"
-          min={minYear}
-          max={maxYear}
-          value={minYear}
-          step="1"
-          aria-label="Minimum publication year"
-          class="range-input range-input--min"
-        />
-        <input
-          id="year-max-input"
-          type="range"
-          min={minYear}
-          max={maxYear}
-          value={maxYear}
-          step="1"
-          aria-label="Maximum publication year"
-          class="range-input range-input--max"
-        />
+  {
+    research.themes.length > 0 ? (
+      <div class="mb-5 grid grid-cols-1 gap-4 md:grid-cols-3">
+        {research.themes.map((theme) => (
+          <div class={`rounded-xl border p-5 ${themeCardStyles[theme.tone].card}`}>
+            <span class={`mb-2 block font-mono text-xs font-semibold ${themeCardStyles[theme.tone].num}`}>
+              {theme.number}
+            </span>
+            <h3 class="mb-2 text-[15px] font-bold text-slate-50">{theme.title}</h3>
+            <p class="text-xs leading-relaxed text-slate-300/90 sm:text-[13px]">
+              <RichText segments={theme.segments} />
+            </p>
+          </div>
+        ))}
       </div>
+    ) : (
+      <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+        {emptyThemeSlots.map((slot) => (
+          <div class={`rounded-xl border border-dashed p-5 opacity-60 ${themeCardStyles[slot.tone].card}`}>
+            <span class={`mb-2 block font-mono text-xs font-semibold ${themeCardStyles[slot.tone].num}`}>
+              {slot.number}
+            </span>
+            <div class="h-4 w-28 rounded bg-slate-800/70"></div>
+          </div>
+        ))}
+      </div>
+    )
+  }
 
-      <span id="year-max-display" class="w-9 font-mono text-xs font-semibold text-rose-300">
-        {maxYear}
-      </span>
-    </div>
-
-    <div class="flex items-center justify-between gap-3 sm:justify-end">
-      <div class="flex items-center gap-2.5">
-        <label for="tag-filter" class="font-mono text-xs text-slate-400">or tag:</label>
-        <select
-          id="tag-filter"
-          class="cursor-pointer rounded-lg border border-slate-700/80 bg-[#0b111e] px-3 py-1.5 font-mono text-xs text-slate-200 transition-colors focus:border-teal-400 focus:outline-none"
+  {
+    research.scholarUrl && (
+      <p class="mb-7 text-xs text-slate-400 sm:text-sm">
+        For a complete publication index, visit my{' '}
+        <a
+          href={research.scholarUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-slate-200 underline decoration-slate-500/70 underline-offset-4 transition-colors hover:text-teal-300 hover:decoration-teal-400"
         >
-          <option value="all">all</option>
-          {
-            tags.map((tag) => (
-              <option value={tag}>{research.tagLabels[tag]}</option>
-            ))
-          }
-        </select>
+          Google Scholar
+        </a>{' '}
+        page.
+      </p>
+    )
+  }
+
+  {
+    research.publications.length > 0 ? (
+      <>
+        <!-- Interactive Filter Bar: Dual year slider + tag dropdown -->
+        <div class="mb-6 flex flex-col justify-between gap-4 rounded-xl border border-slate-800/90 bg-[#111a2c] px-4 py-3 sm:flex-row sm:items-center">
+          <div class="flex flex-1 flex-wrap items-center gap-3">
+            <span class="font-mono text-xs text-slate-400">Filter by year:</span>
+            <span id="year-min-display" class="w-9 font-mono text-xs font-semibold text-teal-300">
+              {minYear}
+            </span>
+
+            <div class="range-slider-wrapper min-w-[140px] flex-1 max-w-xs">
+              <div class="range-track-bg"></div>
+              <div id="range-track-fill" class="range-track-fill" style="left: 0%; width: 100%;"></div>
+              <input
+                id="year-min-input"
+                type="range"
+                min={minYear}
+                max={maxYear}
+                value={minYear}
+                step="1"
+                aria-label="Minimum publication year"
+                class="range-input range-input--min"
+              />
+              <input
+                id="year-max-input"
+                type="range"
+                min={minYear}
+                max={maxYear}
+                value={maxYear}
+                step="1"
+                aria-label="Maximum publication year"
+                class="range-input range-input--max"
+              />
+            </div>
+
+            <span id="year-max-display" class="w-9 font-mono text-xs font-semibold text-rose-300">
+              {maxYear}
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between gap-3 sm:justify-end">
+            <div class="flex items-center gap-2.5">
+              <label for="tag-filter" class="font-mono text-xs text-slate-400">or tag:</label>
+              <select
+                id="tag-filter"
+                class="cursor-pointer rounded-lg border border-slate-700/80 bg-[#0b111e] px-3 py-1.5 font-mono text-xs text-slate-200 transition-colors focus:border-teal-400 focus:outline-none"
+              >
+                <option value="all">all</option>
+                {tags.map((tag) => (
+                  <option value={tag}>{research.tagLabels[tag]}</option>
+                ))}
+              </select>
+            </div>
+
+            <span id="pub-count" class="font-mono text-[11px] text-slate-500">
+              {research.publications.length}/{research.publications.length}
+            </span>
+          </div>
+        </div>
+
+        <!-- 3-Column Responsive Publications Grid -->
+        <div id="publications-grid" class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {research.publications.map((pub) => (
+            <PublicationCard publication={pub} ownerName={hero.name} />
+          ))}
+        </div>
+
+        <!-- Empty Filter State -->
+        <div
+          id="publications-empty"
+          class="hidden rounded-xl border border-dashed border-slate-800 bg-[#111a2c]/50 px-6 py-10 text-center"
+        >
+          <p class="text-sm text-slate-400">No publications match the selected year range and tag.</p>
+          <button
+            id="reset-filters-btn"
+            type="button"
+            class="mt-3 cursor-pointer rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-1.5 font-mono text-xs text-slate-200 transition-colors hover:border-teal-400 hover:text-teal-300"
+          >
+            Reset filters
+          </button>
+        </div>
+      </>
+    ) : (
+      <div class="rounded-xl border border-dashed border-slate-800 bg-[#111a2c]/40 px-5 py-8 text-center">
+        <p class="font-mono text-xs text-slate-500">No publications added yet.</p>
       </div>
-
-      <span id="pub-count" class="font-mono text-[11px] text-slate-500">
-        {research.publications.length}/{research.publications.length}
-      </span>
-    </div>
-  </div>
-
-  <!-- 3-Column Responsive Publications Grid -->
-  <div id="publications-grid" class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-    {
-      research.publications.map((pub) => (
-        <PublicationCard publication={pub} ownerName={hero.name} />
-      ))
-    }
-  </div>
-
-  <!-- Empty State -->
-  <div
-    id="publications-empty"
-    class="hidden rounded-xl border border-dashed border-slate-800 bg-[#111a2c]/50 px-6 py-10 text-center"
-  >
-    <p class="text-sm text-slate-400">No publications match the selected year range and tag.</p>
-    <button
-      id="reset-filters-btn"
-      type="button"
-      class="mt-3 cursor-pointer rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-1.5 font-mono text-xs text-slate-200 transition-colors hover:border-teal-400 hover:text-teal-300"
-    >
-      Reset filters
-    </button>
-  </div>
+    )
+  }
 </section>
 
 <script is:inline>
@@ -242,7 +276,6 @@ const themeCardStyles: Record<ThemeTone, { card: string; num: string }> = {
       });
     }
 
-    // BibTeX copy-to-clipboard with fallback
     function copyText(text) {
       if (navigator.clipboard && window.isSecureContext) {
         return navigator.clipboard.writeText(text);
